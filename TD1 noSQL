@@ -82,3 +82,33 @@ ORDER BY prix_courant DESC;
 SELECT *
 FROM produit
 ORDER by no_rayon ASC, qtestk DESC;
+-- D. Multi-Table queries
+-- 25. Display the shelf name for the product that has the “YAOURT” label.
+SELECT nom_rayon
+FROM rayon, produit
+where rayon.no_rayon = produit.no_rayon AND libelle_produit LIKE "%YAOURT%";
+-- 26. Display the label and the current price of the products that have the responsible #2.
+SELECT libelle_produit, prix_courant
+FROM produit, rayon
+WHERE produit.no_rayon = rayon.no_rayon AND no_resp = 2;
+-- 27. Display the product labels for which the sales amount for the month of June 2014 is lower than 2000€.
+SELECT libelle_produit
+FROM produit, ventes_mensuelles
+WHERE produit.no_produit = ventes_mensuelles.no_produit AND mois = 6 and année = 2014 AND montant_vente < 2000;
+-- 28. Display the labels of products that have been on a sale of 10%.
+SELECT libelle_produit
+FROM produit, promotion_produit
+WHERE produit.no_produit = promotion_produit.no_produit AND reduction = 0.1;
+-- 29. Display the labels of products that have one or more substitute products.
+SELECT libelle_produit
+FROM produit_substitution, produit
+WHERE produit_substitution.no_produit = produit.no_produit;
+-- 30. Display the product number for which the sales amount for May 2014 is of 3000€.
+SELECT produit.no_produit
+FROM produit, ventes_mensuelles
+WHERE produit.no_produit = ventes_mensuelles.no_produit AND mois = 5 and année = 2014 and montant_vente = 3000;
+-- 31. For products that have at least one substitute product, display the label of the product and those of the substitutes.
+SELECT libelle_produit, no_produit_remplacement
+FROM produit_substitution, produit
+WHERE produit_substitution.no_produit = produit.no_produit;
+
