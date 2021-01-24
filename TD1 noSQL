@@ -1,0 +1,55 @@
+-- 1. Display the shelf names.
+SELECT nom_rayon FROM rayon;
+-- 2. Display the names and surfaces of the shelves.
+SELECT nom_rayon, surface_rayon from rayon;
+-- 3. Display all properties (characteristics) of products.
+SELECT * FROM produit;
+-- 4. Display the types of shelf positions.
+SELECT emplacement_rayon from produit;
+-- 5. Display, without duplicate, the different types of shelf positions.
+SELECT DISTINCT emplacement_rayon FROM produit;
+-- 6. Display the label, the current price and the current price minus 0.50€ of the products.
+SELECT libelle_produit, prix_courant, prix_courant - 0.5 as new_price FROM produit;
+-- 7. Display the label and stock value of each product. (Stock value = qtestk*current price)
+SELECT libelle_produit, qtestk * prix_courant as Stock_value 
+FROM produit;
+-- 8. Display the name and surface of shelf #8.
+SELECT nom_rayon, surface_rayon
+FROM rayon
+WHERE no_rayon = 8;
+-- 9. Display the label, the current price and the shelf locations of products in shelf #5.
+SELECT libelle_produit, prix_courant, emplacement_rayon
+FROM produit
+WHERE no_rayon = 5;
+-- 10. Display the numbers and labels of the products whose current price is more than 15€.
+SELECT no_produit, libelle_produit
+FROM produit
+WHERE prix_courant > 15;
+-- 11. Display the list of products with a quantity in stock between 20 and 30.
+SELECT *
+FROM produit
+WHERE qtestk BETWEEN 20 AND 30;
+-- 12. Display the product numbers for which sales in May 2014 are greater than 2500€.
+SELECT no_produit
+FROM ventes_mensuelles
+WHERE année = 2014 AND mois = 5 AND montant_vente > 2500;
+-- 13. Display the list of products in shelves #4 and #6.
+SELECT * 
+FROM produit
+WHERE no_rayon = 4 or no_rayon = 6;
+-- 14. List the products of shelves #4 and #6, the current price of which is less than 2.50€.
+SELECT *
+FROM produit
+WHERE prix_courant < 2.5 AND (no_rayon = 4 or no_rayon = 6);
+-- 15. Display the label and stock value of products on shelf #4, location TOP.
+SELECT libelle_produit, prix_courant * qtestk as stock_value 
+FROM produit
+WHERE no_rayon = 4 AND emplacement_rayon = "HAUT";
+-- 16. Display the label, the shelf number and the current price of the products for which the quantity in stock is greater than 30 and less or equal to 50 and for which the shelf location is LOW.
+SELECT libelle_produit, no_rayon, prix_courant
+FROM produit
+WHERE (qtestk > 30 and qtestk <= 50) OR emplacement_rayon = "BAS";
+-- 17. Display the label, the current price, the quantity in stock of the products on the shelf #1 with TOP position and on the shelf #2 with LOW as position on shelf.
+SELECT libelle_produit, prix_courant, qtestk
+FROM produit
+WHERE (no_rayon = 1 AND emplacement_rayon = "HAUT") OR (no_rayon = 2 AND emplacement_rayon = "BAS");
