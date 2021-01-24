@@ -111,4 +111,25 @@ WHERE produit.no_produit = ventes_mensuelles.no_produit AND mois = 5 and année 
 SELECT libelle_produit, no_produit_remplacement
 FROM produit_substitution, produit
 WHERE produit_substitution.no_produit = produit.no_produit;
-
+-- E. Queries with Numeric Expressions and Functions
+-- 33. Display the label and the stock value of products, ordered by stock value in descending order.
+SELECT libelle_produit, prix_courant * qtestk as Stock_value 
+FROM produit
+ORDER by prix_courant * qtestk DESC;
+-- 34. Display for each product the label, the current price and the current price reduced by 10%.
+SELECT no_produit, libelle_produit, prix_courant, prix_courant - prix_courant * 0.1 as new_price
+FROM produit;
+-- 35. Display the total shelf area of the supermarket.
+SELECT SUM(surface_rayon)
+FROM rayon;
+-- 36. Display the number of products offered for sale.
+SELECT COUNT(no_produit)
+FROM produit;
+-- 37. Display the total amount of sales for product #5.
+SELECT SUM(montant_vente)
+FROM ventes_mensuelles
+WHERE no_produit = 5;
+-- 38. Display the average price of products on shelf #2.
+SELECT AVG(prix_courant)
+FROM produit
+WHERE no_rayon = 2;
