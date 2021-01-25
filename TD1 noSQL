@@ -1,18 +1,25 @@
 -- 1. Display the shelf names.
-SELECT nom_rayon FROM rayon;
+SELECT nom_rayon 
+FROM rayon;
 -- 2. Display the names and surfaces of the shelves.
-SELECT nom_rayon, surface_rayon from rayon;
+SELECT nom_rayon, surface_rayon 
+FROM rayon;
 -- 3. Display all properties (characteristics) of products.
-SELECT * FROM produit;
+SELECT * 
+FROM produit;
 -- 4. Display the types of shelf positions.
-SELECT emplacement_rayon from produit;
+SELECT emplacement_rayon 
+FROM produit;
 -- 5. Display, without duplicate, the different types of shelf positions.
-SELECT DISTINCT emplacement_rayon FROM produit;
+SELECT DISTINCT emplacement_rayon 
+FROM produit;
 -- 6. Display the label, the current price and the current price minus 0.50€ of the products.
-SELECT libelle_produit, prix_courant, prix_courant - 0.5 as new_price FROM produit;
+SELECT libelle_produit, prix_courant, prix_courant - 0.5 as new_price 
+FROM produit;
 -- 7. Display the label and stock value of each product. (Stock value = qtestk*current price)
 SELECT libelle_produit, qtestk * prix_courant as Stock_value 
 FROM produit;
+
 -- 8. Display the name and surface of shelf #8.
 SELECT nom_rayon, surface_rayon
 FROM rayon
@@ -69,6 +76,7 @@ WHERE emplacement_rayon LIKE "Y%";
 SELECT *
 FROM produit
 WHERE qtestk IS NULL
+
 -- C. ORDER BY queries
 -- 22. Display the list of product labels in alphabetical order.
 SELECT libelle_produit
@@ -82,6 +90,7 @@ ORDER BY prix_courant DESC;
 SELECT *
 FROM produit
 ORDER by no_rayon ASC, qtestk DESC;
+
 -- D. Multi-Table queries
 -- 25. Display the shelf name for the product that has the “YAOURT” label.
 SELECT nom_rayon
@@ -111,6 +120,7 @@ WHERE produit.no_produit = ventes_mensuelles.no_produit AND mois = 5 and année 
 SELECT libelle_produit, no_produit_remplacement
 FROM produit_substitution, produit
 WHERE produit_substitution.no_produit = produit.no_produit;
+
 -- E. Queries with Numeric Expressions and Functions
 -- 33. Display the label and the stock value of products, ordered by stock value in descending order.
 SELECT libelle_produit, prix_courant * qtestk as Stock_value 
@@ -133,3 +143,40 @@ WHERE no_produit = 5;
 SELECT AVG(prix_courant)
 FROM produit
 WHERE no_rayon = 2;
+
+-- F. Queries with GROUP BY clause
+-- 39. Display the average of product prices by shelf.
+SELECT no_produit, AVG(prix_courant)
+FROM produit
+ORDER by no_rayon;
+-- 40. Display the number of promotions per product.
+SELECT produit.no_produit, COUNT(date_debut_promotion)
+FROM promotion_produit, produit
+WHERE produit.no_produit = promotion_produit.no_produit
+group BY no_produit;
+-- 41. Display the product number for the products that have been in at least 3 promotional operations.
+SELECT no_produit
+FROM promotion_produit
+GROUP by no_produit
+HAVING COUNT(date_debut_promotion) >= 3;
+-- 42. Display the product number for the products that have been in at least 3 promotions of more than 10%.
+SELECT no_produit, reduction
+FROM promotion_produit
+WHERE reduction > 0.1
+GROUP by no_produit
+HAVING COUNT(date_debut_promotion) >= 3;
+-- 43. Display the list of responsible IDs for the persons responsible of at least 2 shelves.
+SELECT no_resp
+FROM rayon
+GROUP by no_resp
+HAVING COUNT(no_rayon) >= 2;
+-- 44. Display the amount of annual sales by product
+SELECT no_produit, SUM(montant_vente)
+FROM ventes_mensuelles
+GROUP by année, no_produit;
+-- 45. Display for each product its label and the total amount of sales.
+SELECT produit.no_produit, libelle_produit, sum(montant_vente)
+FROM produit, ventes_mensuelles
+WHERE produit.no_produit = ventes_mensuelles.no_produit
+GROUP by no_produit;
+
