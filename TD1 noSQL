@@ -180,3 +180,24 @@ FROM produit, ventes_mensuelles
 WHERE produit.no_produit = ventes_mensuelles.no_produit
 GROUP by no_produit;
 
+-- 
+-- 46. Display product labels cheaper than “YAOURT”.
+SELECT no_produit, libelle_produit
+FROM produit
+WHERE prix_courant < (SELECT prix_courant FROM produit WHERE libelle_produit = "YAOURT");
+-- 47. Display the labels of products that have at least one substitute. 
+SELECT libelle_produit
+FROM produit
+WHERE no_produit in (SELECT no_produit FROM produit_substitution);
+-- 48. Display the list of products that do not have any substitute.
+SELECT no_produit
+FROM produit
+WHERE no_produit NOT IN (SELECT no_produit FROM produit_substitution);
+-- 49. Display the names of the shelves in which products are sold for more than 15€. 
+SELECT nom_rayon
+FROM rayon
+WHERE no_rayon IN (SELECT no_rayon FROM produit WHERE prix_courant > 15);
+-- 50. Display the label of the most expensive product.
+SELECT libelle_produit
+FROM rayon
+WHERE prix_courant = (SELECT MAX(prix_courant) FROM produit);
