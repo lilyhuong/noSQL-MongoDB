@@ -120,6 +120,11 @@ WHERE produit.no_produit = ventes_mensuelles.no_produit AND mois = 5 and année 
 SELECT libelle_produit, no_produit_remplacement
 FROM produit_substitution, produit
 WHERE produit_substitution.no_produit = produit.no_produit;
+ou 2eme méthode
+SELECT produit_substitution.no_produit,produit.libelle_produit , produit_substitution.no_produit_remplacement
+FROM produit_substitution
+JOIN produit
+ON produit.no_produit = produit_substitution.no_produit;
 
 -- E. Queries with Numeric Expressions and Functions
 -- 33. Display the label and the stock value of products, ordered by stock value in descending order.
@@ -180,7 +185,7 @@ FROM produit, ventes_mensuelles
 WHERE produit.no_produit = ventes_mensuelles.no_produit
 GROUP by no_produit;
 
--- 
+-- G. Nested queries
 -- 46. Display product labels cheaper than “YAOURT”.
 SELECT no_produit, libelle_produit
 FROM produit
