@@ -125,6 +125,11 @@ SELECT produit_substitution.no_produit,produit.libelle_produit , produit_substit
 FROM produit_substitution
 JOIN produit
 ON produit.no_produit = produit_substitution.no_produit;
+ou autre methode
+select p1.libelle_produit, p2.libelle_produit
+from produit p1, produit p2, produit_substitution ps 
+where p1.no_produit=ps.no_produit and p2.no_produit=ps.no_produit_remplacement ;
+
 
 -- E. Queries with Numeric Expressions and Functions
 -- 33. Display the label and the stock value of products, ordered by stock value in descending order.
@@ -151,14 +156,19 @@ WHERE no_rayon = 2;
 
 -- F. Queries with GROUP BY clause
 -- 39. Display the average of product prices by shelf.
-SELECT no_produit, AVG(prix_courant)
+SELECT no_rayon, AVG(prix_courant)
 FROM produit
-ORDER by no_rayon;
+GROUP BY no_rayon;
 -- 40. Display the number of promotions per product.
-SELECT produit.no_produit, COUNT(date_debut_promotion)
-FROM promotion_produit, produit
-WHERE produit.no_produit = promotion_produit.no_produit
-group BY no_produit;
+SELECT no_produit, COUNT(reduction)
+FROM promotion_produit
+GROUP BY no_produit;
+
+SELECT libelle_produit, COUNT(*) 
+from promotion_produit, produit 
+WHERE produit.no_produit = promotion_produit.no_produit 
+GROUP by promotion_produit.no_produit
+
 -- 41. Display the product number for the products that have been in at least 3 promotional operations.
 SELECT no_produit
 FROM promotion_produit
@@ -176,7 +186,7 @@ FROM rayon
 GROUP by no_resp
 HAVING COUNT(no_rayon) >= 2;
 -- 44. Display the amount of annual sales by product
-SELECT no_produit, SUM(montant_vente)
+SELECT no_produit, SUM(montant_vente), année
 FROM ventes_mensuelles
 GROUP by année, no_produit;
 -- 45. Display for each product its label and the total amount of sales.
